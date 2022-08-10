@@ -17,7 +17,7 @@ contract sPOAP is ERC1155Supply, Ownable{
      * Only minter.
      */
     modifier onlyMinter() {
-        require(minters[_msgSender()], "must be minter");
+        require(_minters[_msgSender()], "must be minter");
         _;
     }
 
@@ -25,15 +25,13 @@ contract sPOAP is ERC1155Supply, Ownable{
     string private _name; // collection name
     string private _symbol; // collection symbol
     string private _baseURI; // collection base URI
-    mapping(address => bool) public minters; // Minters
-    mapping(uint256 => uint256) private _totalSupply; // total supply for each id
+    mapping(address => bool) private _minters; // Minters
 
     /* ============ Constructor ============ */
-    constructor(string memory name_, string memory symbol_, string memory baseURI_) ERC1155(""){
+    constructor(string memory name_, string memory symbol_) ERC1155(""){
         _name = name_;
         _symbol = symbol_;
-        _baseURI = baseURI_;
-        minters[msg.sender] = true;
+        _minters[msg.sender] = true;
     }
 
     /* ============ Public Functions ============ */
@@ -54,20 +52,27 @@ contract sPOAP is ERC1155Supply, Ownable{
     /**
      * @dev Returns the metadata uri for specified token id. The id need to exist.
      */
-    function uri(uint256 id) public view virtual override returns (string memory) {
-        require(exists(id));
-        return bytes(_baseURI).length > 0 ? string(abi.encodePacked(_baseURI, id.toString())) : "";
+    function uri(uint256 eventId) public view virtual override returns (string memory) {
+        require(exists(eventId));
+        return bytes(_baseURI).length > 0 ? string(abi.encodePacked(_baseURI, eventId.toString())) : "";
+    }
+
+    /**
+     * @dev Returns whether an address has minter role.
+     */
+    function isMinter(address addr) public view returns(bool){
+        return _minters[addr];
     }
 
     /* ============ External Functions ============ */
     /**
      * @dev Mint sPOAP. This function can only be called by minter.
      */
-    function mint(address to, uint256 id)
+    function mint(address to, uint256 eventId)
         external
         onlyMinter
     {
-        _mint(to, id, 1, "");
+        _mint(to, eventId, 1, "");
     }
 
     function setbaseURI(string memory baseURI_) external onlyOwner {
@@ -79,8 +84,8 @@ contract sPOAP is ERC1155Supply, Ownable{
      */
     function addMinter(address minter) external onlyOwner {
         require(minter != address(0), "Minter must not be 0 address");
-        require(!minters[minter], "Minter already exist");
-        minters[minter] = true;
+        require(!_minters[minter], "Minter already exist");
+        _minters[minter] = true;
         emit EventMinterAdded(minter);
     }
 
@@ -88,8 +93,8 @@ contract sPOAP is ERC1155Supply, Ownable{
      * @dev Remove a existing minter.
      */
     function removeMinter(address minter) external onlyOwner {
-        require(minters[minter], "Minter does not exist");
-        minters[minter] = false;
+        require(_minters[minter], "Minter does not exist");
+        _minters[minter] = false;
         emit EventMinterRemoved(minter);
     }
 
@@ -99,11 +104,11 @@ contract sPOAP is ERC1155Supply, Ownable{
     function safeTransferFrom(
         address from,
         address to,
-        uint256 id,
+        uint256 eventId,
         uint256 amount,
         bytes memory data
     ) public override onlyOwner{
-        super.safeTransferFrom(from, to, id, amount, data);
+        super.safeTransferFrom(from, to, eventId, amount, data);
     }
 
     /**
@@ -112,10 +117,10 @@ contract sPOAP is ERC1155Supply, Ownable{
     function safeBatchTransferFrom(
         address from,
         address to,
-        uint256[] memory ids,
+        uint256[] memory eventIds,
         uint256[] memory amounts,
         bytes memory data
     ) public override onlyOwner{
-        super.safeBatchTransferFrom(from, to, ids, amounts, data);
+        super.safeBatchTransferFrom(from, to, eventIds, amounts, data);
     }
 }

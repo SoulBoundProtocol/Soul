@@ -7,7 +7,7 @@ import "./sPOAP.sol";
 
 contract sPOAPMinter is Ownable{
     /* ============ Events ============ */
-    event sPOAPMinted(address indexed account, uint256 indexed id);
+    event sPOAPMinted(address indexed account, uint256 indexed eventId);
     event SignerChanged(address indexed oldSigner, address indexed newSigner);
 
     /* ============ State Variables ============ */
@@ -26,12 +26,12 @@ contract sPOAPMinter is Ownable{
 
     /* ============ Public Functions ============ */
     /*
-     * @dev concatenate mint account and id to msgHash
+     * @dev concatenate mint account and eventId to msgHash
      * @param account: mint address
-     * @param id: ERC1155 token id
+     * @param eventId: ERC1155 token id
      */
-    function getMessageHash(address account, uint256 id) public pure returns(bytes32){
-        return keccak256(abi.encodePacked(account, id));
+    function getMessageHash(address account, uint256 eventId) public pure returns(bytes32){
+        return keccak256(abi.encodePacked(account, eventId));
     }
 
     /**
@@ -44,21 +44,21 @@ contract sPOAPMinter is Ownable{
     /* ============ External Functions ============ */
     
     /**
-     * @dev mint token `id` to `account` if `signature` is valid. 
-     * `msgHash` is concatenated by `id` and `account`.
+     * @dev mint token `eventId` to `account` if `signature` is valid. 
+     * `msgHash` is concatenated by `eventId` and `account`.
      * @param account: mint account
-     * @param id: ERC1155 token id
+     * @param eventId: ERC1155 token id
      */
-    function mint(address account, uint256 id, bytes memory signature)
+    function mint(address account, uint256 eventId, bytes memory signature)
     external
     {
-        bytes32 msgHash = getMessageHash(account, id); // 将account和id打包消息
+        bytes32 msgHash = getMessageHash(account, eventId); // 将account和eventId打包消息
         bytes32 ethSignedMessageHash = ECDSA.toEthSignedMessageHash(msgHash); // 计算以太坊签名消息
         require(verify(ethSignedMessageHash, signature), "Invalid signature"); // ECDSA检验通过
-        require(!mintedAddress[id][account], "Already minted!"); // 地址没有mint过
-        poap.mint(account, id); // mint
-        mintedAddress[id][account] = true; // 记录mint过的地址
-        emit sPOAPMinted(account, id);
+        require(!mintedAddress[eventId][account], "Already minted!"); // 地址没有mint过
+        poap.mint(account, eventId); // mint
+        mintedAddress[eventId][account] = true; // 记录mint过的地址
+        emit sPOAPMinted(account, eventId);
     }
 
     /**
