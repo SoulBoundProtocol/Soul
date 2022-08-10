@@ -1,5 +1,5 @@
 # sPOAP: soulbound POAP
-sPOAP is a soulbound implementation of Proof of Attendence Protocol (POAP), created by [SoulBound Protocol](https://soulbound.life). 
+sPOAP is a soulbound implementation of Proof of Attendence Protocol (POAP), created by [SoulBound Protocol](https://soulbound.life). sPOAP is SBT (SoulBound Token).
 
 # Features
 
