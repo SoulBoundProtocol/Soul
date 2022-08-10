@@ -9,7 +9,7 @@ sPOAP is a soulbound implementation of Proof of Attendence Protocol (POAP), crea
 
 # How it works?
 
-1. Project/DAO creates new event at SoulBound Protocol website, free and permissionless.
+1. Project/DAO creates new event at SoulBound Protocol website, free and permissionless. (Shall we bring this step on-chain?)
 2. SoulBound Protocol server links the project/DAO address and event to a sPOAP eventId.
 3. Project/DAO submit the address list of event pariticipants.
 4. SoulBound Protocol server signs on the address list, allowing them to mint sPOAP.
