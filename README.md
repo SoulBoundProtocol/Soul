@@ -3,7 +3,7 @@ sPOAP is a soulbound implementation of Proof of Attendence Protocol (POAP), crea
 
 # Features
 
-- **ERC1155**: sPOAP follows ERC1155 multi-token standard (See [EIP-1155](https://eips.ethereum.org/EIPS/eip-1155)).
+- **ERC1155**: sPOAP follows ERC1155 multi-token standard (See [EIP-1155](https://eips.ethereum.org/EIPS/eip-1155)). sPOAP event ID corresponds to ERC1155 token ID.
 - **Non-transferable**: SoulBound
 - **Community Recovery**: at extreme condition (losing private key), community multisig (contract owner) can transfer the token to the new wallet under the approvement of the token holder.
 
