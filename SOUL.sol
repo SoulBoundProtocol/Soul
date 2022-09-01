@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
-contract SOAP is ERC1155Supply, Ownable{
+contract SOUL is ERC1155Supply, Ownable{
     using Strings for uint256;
 
     /* ============ Events ============ */
@@ -66,7 +66,7 @@ contract SOAP is ERC1155Supply, Ownable{
 
     /* ============ External Functions ============ */
     /**
-     * @dev Mint SOAP. This function can only be called by minter.
+     * @dev Mint SOUL. This function can only be called by minter.
      */
     function mint(address to, uint256 eventId)
         external
